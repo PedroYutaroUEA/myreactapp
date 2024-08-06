@@ -10,19 +10,22 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form } from './ui/form'
 
+const maxBioSize = 400
 
 const formSchema = z.object({
   bio: z.string()
     .min(1, {message: "Bio is required."})
-    .max(100, {message: "Bio must not be longer than 100 characters."})
+    .max(maxBioSize, {message: `Bio must not be longer than ${maxBioSize} characters.`})
 })
 
 export function DialogComponent() {
   const [image, setImage] = useState()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [bioLen, setBioLen] = useState(0)
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const handleBioLen = (e: string) => setBioLen(e.length)
 
   async function getProfilePic() {
     try {
@@ -58,10 +61,10 @@ export function DialogComponent() {
       <Form {...form} >
         <form
           onSubmit={form.handleSubmit(() => alert('penis'))}
-          className="absolute w-1/3 h-3/4 bg-zinc-200 px-8 py-4 rounded-md flex flex-col gap-4"
+          className="absolute w-1/3 h-3/4 bg-zinc-200 px-8 py-4 rounded-md flex flex-col gap-5"
         >
         <DialogHeader>
-          <DialogTitle className='opacity-30 text-sm'>Creating post</DialogTitle>
+          <DialogTitle className='opacity-30 text-sm border-b-2 border-dashed border-zinc-500'>Creating post</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center justify-start gap-4">
           <div className="flex items-center w-full justify-start gap-12">
@@ -91,22 +94,33 @@ export function DialogComponent() {
           </div>
           <Textarea
             placeholder='Text your bio...'
-            className='resize-none focus-visible:ring-offset-0 h-60'
+            className='resize-none focus-visible:ring-offset-0 h-60 text-base'
+            onChange={e => handleBioLen(e.target.value)}
           />
         </div>
-        <DialogFooter>
-          <Button
-          size={'lg'}
-          className='text-lg focus-visible:ring-offset-0'
-          variant={'destructive'}
-          onClick={() => closeModal()}
-          >Cancel</Button>
-          <Button
-          type="submit"
-          size={'lg'}
-          className='text-lg focus-visible:ring-offset-0'
-          variant={'save'}>Save</Button>
-        </DialogFooter>
+        <div className="flex justify-between items-start">
+          <div className={
+            bioLen > maxBioSize
+            ? "text-red-500"
+            : "text-zinc-600"
+          }>
+            {bioLen}/{maxBioSize}
+          </div>
+          <DialogFooter>
+            <Button
+            size={'lg'}
+            className='text-lg focus-visible:ring-offset-0'
+            variant={'destructive'}
+            onClick={closeModal}
+            >Cancel</Button>
+            <Button
+            type="submit"
+            size={'lg'}
+            disabled={bioLen > maxBioSize}
+            className='text-lg focus-visible:ring-offset-0'
+            variant={'save'}>Save</Button>
+          </DialogFooter>
+          </div>
         </form>
         </Form>
       </DialogContent>
