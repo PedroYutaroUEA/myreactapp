@@ -1,25 +1,15 @@
+import { Body } from "./components/Body";
+import { DialogComponent } from "./components/DialogComponent";
+import { Header } from "./components/Header";
+
 function App() {
   return (
-    <div className="bg-zinc-800 h-screen">
-      <h1 className="text-white text-6xl font-extrabold text-center">
-        Hello, world!
-      </h1>
-      <h2 className="text-white text-2xl font-extrabold text-center">
-        Welcome to your new React app.
-      </h2>
-      <p className="text-white text-lg text-center">
-        Get started by editing <code>src/App.tsx</code>.
-      </p>
-      <p className="text-white text-lg text-center">
-        <a
-          className="text-blue-300 hover:text-blue-400"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </p>
+    <div className="bg-zinc-800 h-screen flex flex-col justify-start items-center overflow-hidden">
+      <Header label="Wellcome :3" link="https://github.com/YUT4R0"/>
+      <Body />
+      <footer className="w-scree justify-center items-center flex my-5">
+        <DialogComponent />
+      </footer>
     </div>
   );
 }
